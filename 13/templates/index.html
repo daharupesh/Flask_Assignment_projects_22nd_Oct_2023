@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Notifications</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        #notifications {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background: #f9f9f9;
+        }
+        .notification {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Notifications</h1>
+    <input type="text" id="username" placeholder="Enter your username">
+    <button onclick="joinRoom()">Join Room</button>
+    <button onclick="leaveRoom()">Leave Room</button>
+    <div id="notifications">
+        <h3>Notifications:</h3>
+        <div id="notificationList"></div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        socket.on('notification', function(msg) {
+            const notificationList = document.getElementById('notificationList');
+            const notificationElement = document.createElement('div');
+            notificationElement.classList.add('notification');
+            notificationElement.textContent = msg.message;
+            notificationList.appendChild(notificationElement);
+        });
+
+        socket.on('connect', function() {
+            console.log('Connected to the server');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from the server');
+        });
+
+        function joinRoom() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                socket.emit('join', {username: username});
+            }
+        }
+
+        function leaveRoom() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                socket.emit('leave', {username: username});
+            }
+        }
+    </script>
+</body>
+</html>

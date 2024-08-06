@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Chat</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        #input {
+            display: flex;
+        }
+        #input textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #input button {
+            padding: 10px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <div id="messages"></div>
+        <div id="input">
+            <textarea id="message" placeholder="Type your message here..."></textarea>
+            <button id="send">Send</button>
+        </div>
+    </div>
+    <script>
+        const socket = io();
+
+        const messages = document.getElementById('messages');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+
+        socket.on('response', function(msg) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = msg;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        sendButton.addEventListener('click', function() {
+            const msg = messageInput.value;
+            if (msg) {
+                socket.send(msg);
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>

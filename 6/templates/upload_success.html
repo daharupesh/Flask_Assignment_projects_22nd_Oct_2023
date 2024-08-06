@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <title>Upload Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .success-message {
+            background: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border: 1px solid #d6e9c6;
+            border-radius: 5px;
+        }
+        .uploaded-file {
+            margin-top: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Successful</h1>
+    <div class="success-message">
+        File <strong>{{ filename }}</strong> has been uploaded successfully.
+    </div>
+    <div class="uploaded-file">
+        <a href="{{ url_for('uploaded_file', filename=filename) }}">View uploaded file</a>
+    </div>
+    <a class="back-link" href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
